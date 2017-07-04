@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="
+            http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        "
+>
+    <changeSet id="changelog_create_appointment_table" author="ukowohl">
+        <createTable schemaName="audibene_data" tableName="appointment">
+            <column name="id" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created" type="timestamp with time zone"/>
+            <column name="modified" type="timestamp with time zone"/>
+            <column name="customer_id" type="varchar(255)">
+                <constraints
+                        references="audibene_data.customer(id)"
+                        foreignKeyName="fk_customer_id"
+                        deleteCascade="true"
+                />
+            </column>
+            <column name="employee_id" type="varchar(255)">
+                <constraints
+                        references="audibene_data.employee(id)"
+                        foreignKeyName="fk_employee_id"
+                        deleteCascade="true"
+                />
+            </column>
+            <column name="begins" type="timestamp with time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ends" type="timestamp with time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rating" type="varchar(255)" defaultValue="none"/>
+            <column name="customer_comment" type="varchar(8192)"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: ${DB_JDBC_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    tomcat:
+      test-on-borrow: true
+      validation-query: SELECT 1
+      initial-size: 1
+      min-idle: 1
+      max-active: 10
+
+  jackson:
+    serialization.WRITE_DATES_AS_TIMESTAMPS: false
+
+logbook:
+  write:
+    category: http.wire-log
+    level: INFO
+
+liquibase:
+  change-log: classpath:db/changelog/changelog.xml
+

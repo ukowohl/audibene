@@ -1,0 +1,560 @@
+swagger: '2.0'
+info:
+  title: Audibene CRM Sample API
+  description: API Documentation for Audibene Task
+  version: '0.1'
+  contact:
+      name: ukowohl
+host: localhost:8080
+basePath: /api
+schemes:
+  - http
+paths:
+  '/customers':
+    get:
+      tags:
+        - customer
+      summary: "Gets all customers"
+      description: "Gets all customers existing"
+      produces:
+        - application/json
+        - application/json+problem
+      parameters:
+        - in: query
+          type: integer
+          name: page
+          description: 'Defines Page Number'
+          default: 0
+        - in: query
+          type: integer
+          name: size
+          description: 'Defines the size of the Page'
+          default: 20
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/customerPage'
+    put:
+      tags:
+        - customer
+      summary: "Creates Customer"
+      consumes:
+        - application/json
+      produces:
+        - application/json+problem
+      parameters:
+        - in: body
+          name: Customer
+          description: Holds Customer
+          schema:
+            $ref: '#/definitions/customerCreateData'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/customer'
+  '/customers/{customer-id}':
+    get:
+      tags:
+        - customer
+      summary: Gets Customer
+      description: Gets Customer by given ID
+      parameters:
+        - name: customer-id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/customer'
+    delete:
+      tags:
+        - customer
+      summary: Deletes Customer
+      description: Deletes Customer by given ID
+      parameters:
+        - name: customer-id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+    put:
+      tags:
+        - customer
+      summary: Updates Customer
+      description: Updates Customer with given ID
+      parameters:
+        - name: customer-id
+          in: path
+          required: true
+          type: string
+        - in: body
+          name: customerUpdateData
+          description: Holds data to update customer, all data in that dto will overwrite existing customer data
+          schema:
+            $ref: '#/definitions/customerUpdateData'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/customer'
+  '/customers/{customer-id}/appointments/last':
+    get:
+      tags:
+        - customer
+      summary: Last CustomerAppointment
+      description: Gets the last customer appointment
+      parameters:
+        - name: customer-id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/appointment'
+  '/customers/{customer-id}/appointments/next':
+    get:
+      tags:
+        - customer
+      summary: Next CustomerAppointment
+      description: Gets the next customer appointment
+      parameters:
+        - name: customer-id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/appointment'
+  '/customers/{customer-id}/{appointment-id}/rating':
+    put:
+      tags:
+        - customer
+      summary: Updates the rating of an appointment
+      description: Updates the rating of an appointment related to a customer and an appointmentId
+      parameters:
+        - name: customer-id
+          in: path
+          required: true
+          type: string
+        - name: appointment-id
+          in: path
+          required: true
+          type: string
+        - in: body
+          name: ratingData
+          required: true
+          description: Data of rating
+          schema:
+            $ref: '#/definitions/ratingData'
+      responses:
+        200:
+          description: OK
+  '/employees':
+    get:
+      tags:
+        - employees
+      summary: "Gets all employees"
+      description: "Gets all employees existing"
+      produces:
+        - application/json
+        - application/json+problem
+      parameters:
+        - in: query
+          type: integer
+          name: page
+          description: 'Defines Page Number'
+          default: 0
+        - in: query
+          type: integer
+          name: size
+          description: 'Defines the size of the Page'
+          default: 20
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/employeesPage'
+    put:
+      tags:
+        - employees
+      summary: "Creates an employee"
+      consumes:
+        - application/json
+      produces:
+        - application/json+problem
+      parameters:
+        - in: body
+          name: Employee
+          description: Holds Employee
+          schema:
+            $ref: '#/definitions/employeeCreateData'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/employee'
+  '/employees/{employee-id}':
+    get:
+      tags:
+        - employees
+      summary: Gets Employee
+      description: Gets Employee by given ID
+      parameters:
+        - name: employee-id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/employee'
+    delete:
+      tags:
+        - employees
+      summary: Deletes Employee
+      description: Deletes employee by given ID
+      parameters:
+        - name: employee-id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+    put:
+      tags:
+        - employees
+      summary: Updates Employee
+      description: Updates Employee with given ID
+      parameters:
+        - name: employee-id
+          in: path
+          required: true
+          type: string
+        - in: body
+          name: employeeUpdateData
+          description: Holds data to update employee, all data in that dto will overwrite existing entity data
+          schema:
+            $ref: '#/definitions/employeeUpdateData'
+      responses:
+        200:
+          description: OK
+  '/api/employees/{employee-id}/appointments':
+    get:
+      tags:
+        - employees
+      summary: Gets Employees appointment
+      description: Gets appointments by given ID of employee
+      parameters:
+        - name: employee-id
+          in: path
+          required: true
+          type: string
+        - name: start
+          in: query
+          type: string
+          format: date-time
+          description: Start of the appointment
+          default: min time
+        - name: end
+          in: query
+          type: string
+          format: date-time
+          description: End of the appointment
+          default: max time
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/employeesPage'
+  '/api/appointments':
+    get:
+      tags:
+        - appointments
+      summary: "Gets all appointments"
+      description: "Gets all appointments existing"
+      produces:
+        - application/json
+        - application/json+problem
+      parameters:
+        - in: query
+          type: integer
+          name: page
+          description: 'Defines Page Number'
+          default: 0
+        - in: query
+          type: integer
+          name: size
+          description: 'Defines the size of the Page'
+          default: 20
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/appointmentsPage'
+    put:
+      tags:
+        - appointments
+      summary: "Creates Appointment"
+      consumes:
+        - application/json
+      produces:
+        - application/json+problem
+      parameters:
+        - in: body
+          name: Customer
+          description: Holds Appointment data
+          schema:
+            $ref: '#/definitions/appointmentCreateData'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/appointment'
+  '/api/appointments/{appointment-id}':
+    get:
+      tags:
+        - appointments
+      summary: Gets appointment
+      description: Gets appointment by given ID
+      parameters:
+        - name: appointment-id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/appointment'
+    delete:
+      tags:
+        - appointments
+      summary: Deletes Appointment
+      description: Deletes appointment by given ID
+      parameters:
+        - name: appointment-id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+    put:
+      tags:
+        - appointments
+      summary: Updates the appointment, NOT IMPLEMENTED
+      description: Updates the appointment
+      responses:
+        200:
+          description: OK
+
+definitions:
+  ratingData:
+    properties:
+      rating:
+        type: string
+        enum:
+          - ONE_STAR
+          - TWO_STAR
+          - THREE_STAR
+      comment:
+        type: string
+    required:
+      - rating
+      - comment
+  appointmentCreateData:
+    properties:
+      customerId:
+        type: string
+        description:  'Identifier of related customer'
+      employeeId:
+        type: string
+        description: 'Identifier of related employee'
+      begin:
+        type: string
+        format: ISO date-time
+        description: Start of the appointment
+        example: '2017-07-04T04:43:50Z'
+      end:
+        type: string
+        format: ISO date-time
+        description: End of the appointment
+        example: '2017-07-04T05:43:50Z'
+      rating:
+        type: string
+        enum:
+          - ONE_STAR
+          - TWO_STAR
+          - THREE_STAR
+      customerComment:
+        type: string
+        description: Comment of the customer according to rating
+    required:
+      - customerId
+      - employeeId
+      - begin
+      - end
+  appointmentsPage:
+    properties:
+      content:
+        type: array
+        items:
+          $ref: '#/definitions/appointment'
+      totalElements:
+        type: integer
+        description: Total Elements found in the repository
+      last:
+        type: boolean
+        description: True if returned page is the last page, false otherwise
+      first:
+        type: boolean
+        description: True if returned page is the first page, false otherwise
+      size:
+        type: integer
+        description: Size of the current page
+      totalPages:
+        type: integer
+        description: Total Number of Pages
+      numberOfElements:
+        type: integer
+        description: Number of Elements on Page
+  appointment:
+    properties:
+      id:
+        type: string
+        description: 'Identifier of unique appointment instance'
+      customerId:
+        type: string
+        description:  'Identifier of related customer'
+      employeeId:
+        type: string
+        description: 'Identifier of related employee'
+      begin:
+        type: string
+        format: ISO date-time
+        description: Start of the appointment
+        example: '2017-07-04T04:43:50Z'
+      end:
+        type: string
+        format: ISO date-time
+        description: End of the appointment
+        example: '2017-07-04T05:43:50Z'
+      rating:
+        type: string
+        enum:
+          - ONE_STAR
+          - TWO_STAR
+          - THREE_STAR
+      customerComment:
+        type: string
+        description: Comment of the customer according to rating
+    required:
+      - id
+      - customerId
+      - employeeId
+      - begin
+      - end
+  employee:
+    properties:
+      id:
+        type: string
+        description: 'Identifier of employee'
+      name:
+        type: string
+        description: 'The name of the employee'
+  employeeUpdateData:
+    properties:
+      name:
+        type: string
+        description: 'The name of the employee'
+    required:
+      - name
+  employeeCreateData:
+    properties:
+      name:
+        type: string
+        description: 'The name of the employee'
+    required:
+      - name
+  employeesPage:
+    properties:
+      content:
+        type: array
+        items:
+          $ref: '#/definitions/employee'
+      totalElements:
+        type: integer
+        description: Total Elements found in the repository
+      last:
+        type: boolean
+        description: True if returned page is the last page, false otherwise
+      first:
+        type: boolean
+        description: True if returned page is the first page, false otherwise
+      size:
+        type: integer
+        description: Size of the current page
+      totalPages:
+        type: integer
+        description: Total Number of Pages
+      numberOfElements:
+        type: integer
+        description: Number of Elements on Page
+  customerCreateData:
+    properties:
+      name:
+        type: string
+        description: Name of the customer
+    required:
+      - name
+  customerUpdateData:
+    properties:
+      name:
+        type: string
+        description: Name of the customer
+    required:
+      - name
+  customerPage:
+    properties:
+      content:
+        type: array
+        items:
+          $ref: '#/definitions/customer'
+      totalElements:
+        type: integer
+        description: Total Elements found in the repository
+      last:
+        type: boolean
+        description: True if returned page is the last page, false otherwise
+      first:
+        type: boolean
+        description: True if returned page is the first page, false otherwise
+      size:
+        type: integer
+        description: Size of the current page
+      totalPages:
+        type: integer
+        description: Total Number of Pages
+      numberOfElements:
+        type: integer
+        description: Number of Elements on Page
+  customer:
+    properties:
+      id:
+        type: string
+        description: 'Identifier of customer'
+      name:
+        type: string
+        description: 'The name of the customer'
