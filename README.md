@@ -7,7 +7,9 @@ mvn clean install
 // build application and setup test database (will setup H2 in Memory DB for testing the persistence layer)
 mvn clean install -Pintegration-test
 ```
-In order to run the application, please configure the database according to **application.yaml** file. Run locally with local spring profile
+In order to run the application, please configure the database according to **application.yaml** file. Run locally with local spring profile!
+
+See API for more information under resources/api-definition.yaml
 
 **Important**: Immutables (https://immutables.github.io/) are used, please enable Annotation Processing as described in Immutables Documentation 
 
